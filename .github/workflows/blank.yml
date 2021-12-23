@@ -29,16 +29,31 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, world!
         
-      - name: "Helm checks"
-        uses: mbovo/action-helm-tools@v1.0.0
+      - name: Connect to Artifactory
+        uses: Deepakanandrao/jfrog-cli@v3
         with:
-          action: "check"
-        env:
-          CHART_DIR: ia-helm-charts/charts/ds-boot-chart
-          CHART_VERSION: ${{ env.SEMVER_VERSION }}
-          ARTIFACTORY_URL: https://intacct.jfrog.io/artifactory/ia-helm/
-          ARTIFACTORY_USERNAME: ${{ secrets.IA_GITHUB_ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_PASSWORD: ${{ secrets.IA_GITHUB_ARTIFACTORY_TOKEN }}
+          cli_cmd: |                                      # commands to be excuted
+           'jfrog rt ping'
+        env:  
+          SERVER_URL: ${{ secrets.SERVER_URL }}           # Required (e.g. https://jfrogy.com/artifactory)
+          SERVER_ID: ${{ secrets.SERVER_ID }}             # Optional - Name to be recognized server with
+          DISTRIBUTION_URL: ${{ secrets.SERVER_URL }}     # Optional
+          ACCESS_TYPE: ${{ secrets.ACTION_TYPE }}         # Required  (username-password, access-token, api-key)
+          USERNAME: ${{ secrets.USERNAME }}               # Required any of one of the following
+          PASSWORD: ${{ secrets.PASSWORD }}
+          API_KEY: ${{ secrets.API_KEY }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        
+#       - name: "Helm checks"
+#         uses: mbovo/action-helm-tools@v1.0.0
+#         with:
+#           action: "check"
+#         env:
+#           CHART_DIR: ia-helm-charts/charts/ds-boot-chart
+#           CHART_VERSION: ${{ env.SEMVER_VERSION }}
+#           ARTIFACTORY_URL: https://intacct.jfrog.io/artifactory/ia-helm/
+#           ARTIFACTORY_USERNAME: ${{ secrets.IA_GITHUB_ARTIFACTORY_USERNAME }}
+#           ARTIFACTORY_PASSWORD: ${{ secrets.IA_GITHUB_ARTIFACTORY_TOKEN }}
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
